@@ -7,9 +7,11 @@ class msgDetector(object):
     def clean(self, s):
         translator = str.maketrans("", "", string.punctuation)
         return s.translate(translator)
+    
     def tokenize(self, text):
         text = self.clean(text).lower()
         return re.split("\W+", text)
+    
     def get_word_counts(self, words):
         word_counts = {}
         for word in words:

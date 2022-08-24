@@ -2,36 +2,31 @@ import os
 import re
 import string
 import math
+from pathlib import Path
 
 def get_data(msg_nl, class_label_csv):
-    data = []
-    target = []
+    # list contain tuple -> (msg, label)
+    msg_with_label = []
     
-    with open(msg_nl, 'r') as f: 
-        with open(class_label_csv, 'r') as fc:
-            for comment, class_line in zip(f.readlines(), fc.readlines()):
-                comment = comment.strip()
-                one_hot_per_each_class = class_line.strip().replace(" ", '').split(',')[1:]
-                count = 0
-                one_hot_index = 0
-                
-                for index, num in enumerate(one_hot_per_each_class):
-                    if int(num):
-                        one_hot_index = index
-                        count += 1
-                    if count > 1:
-                        break
-                if count == 1:
-                    data.append(comment)
-                    target.append(one_hot_index)
-        f.close()
-        fc.close()
-    return data, target
+    fm = open(msg_nl, 'r')
+    fl = open(class_label_csv, 'r') 
+    
+    for comment, class_line in zip(fm.readlines(), fl.readlines()):
+        labels = list(map(int, class_line.split(', ')[1:]))
+        
+        if sum(labels) == 1:
+            msg_with_label.append((comment.strip(), labels.index(1)))
+    
+    fm.close()
+    fl.close()
+            
+    return msg_with_label
     # data = ["this is normal commit", "to change version"...]
     # target = [8,2,0,2,2,2,2,2,4,2,2,2.....] number means index of target_names
 
 def main():
-    X, y = get_data("../input/msg.nl", "../input/input.csv")
+    root_path = str(Path(__file__).parent.parent.resolve())
+    X, y = get_data(root_path + "/input/msg.nl", root_path + "/input/input.csv")
     print("len(x)", len(X))
     print("len(Y)", len(y))
 
