@@ -11,7 +11,7 @@ def get_data(msg_nl, class_label_csv):
     fm = open(msg_nl, 'r')
     fl = open(class_label_csv, 'r') 
     
-    for comment, class_line in zip(fm.readlines(), fl.readlines()):
+    for comment, class_line in zip(fm.readlines(), fl.readlines()[1:]):
         labels = list(map(int, class_line.split(', ')[2:]))
         
         if sum(labels) == 1:
