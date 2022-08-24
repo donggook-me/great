@@ -12,7 +12,7 @@ def get_data(msg_nl, class_label_csv):
     fl = open(class_label_csv, 'r') 
     
     for comment, class_line in zip(fm.readlines(), fl.readlines()):
-        labels = list(map(int, class_line.split(', ')[1:]))
+        labels = list(map(int, class_line.split(', ')[2:]))
         
         if sum(labels) == 1:
             msg_with_label.append((comment.strip(), labels.index(1)))
